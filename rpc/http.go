@@ -30,6 +30,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"crypto/tls"
 
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/rs/cors"
@@ -117,7 +118,14 @@ func DialHTTPWithClient(endpoint string, client *http.Client) (*Client, error) {
 
 // DialHTTP creates a new RPC client that connects to an RPC server over HTTP.
 func DialHTTP(endpoint string) (*Client, error) {
-	return DialHTTPWithClient(endpoint, new(http.Client))
+ 	tr := &http.Transport{
+        	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    	}
+
+	client := &http.Client{
+		Transport: tr,
+		}
+	return DialHTTPWithClient(endpoint, client)
 }
 
 func (c *Client) sendHTTP(ctx context.Context, op *requestOp, msg interface{}) error {

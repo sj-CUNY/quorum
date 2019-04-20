@@ -21,6 +21,7 @@ import (
 	"crypto/tls"
 	"net"
 	"os"
+	"fmt"
 
 	"github.com/ethereum/go-ethereum/log"
 )
@@ -29,9 +30,9 @@ import (
 // KGALLAGHER: Adding tls to this connection.
 func StartHTTPEndpoint(endpoint string, apis []API, modules []string, cors []string, vhosts []string, timeouts HTTPTimeouts) (net.Listener, *Server, error) {
 	// KGALLAGHER: Assuming that the keys are server_cert.crt and server_key.key
-	cert, err := tls.LoadX509KeyPair("server_cert.crt", "server_key.key")
-	if err != nil {
-		log.Println(err)
+	cert, err1 := tls.LoadX509KeyPair("server_cert.crt", "server_key.key")
+	if err1 != nil {
+		fmt.Println(err1)
 		os.Exit(1)
 	}
 	// KGALLAGHER: config for https.
